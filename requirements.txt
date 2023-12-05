@@ -1,4 +1,4 @@
 requests
-beautifulsoup4
-nltk
-selenium
+beautifulsoup4==4.12.2
+nltk==3.8.1
+selenium==4.15.2

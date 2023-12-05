@@ -17,6 +17,8 @@ REVIEWS_CONTAINER = (
 
 REVIEW_ITEM = ".ll4r2nl.atm_kd_pg2kvz_1bqn0at"
 
+# temporary
+GECKODRIVER_PATH = "./geckodriver"
 
 def strip_reviews_link(link: str) -> str:
     url = urlparse(link)
@@ -27,10 +29,10 @@ def strip_reviews_link(link: str) -> str:
 
 
 def get_reviews(review_link: str):
-    chrome_options = webdriver.chrome.options.Options()
-    chrome_options.add_argument("--headless")
-    driver = webdriver.Chrome(chrome_options=chrome_options)
-    chrome_options.add_argument("--headless")
+    options = webdriver.FirefoxOptions()
+    options.add_argument("-headless")
+    service = webdriver.firefox.service.Service(executable_path=GECKODRIVER_PATH)
+    driver = webdriver.Firefox(options=options, service=service)
     container = None
     try:
         driver.get(review_link)
