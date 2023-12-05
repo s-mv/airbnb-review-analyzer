@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+import time
 
 REVIEWS_CONTAINER = (
     ".di536pa.atm_ks_zryt35.atm_mk_h2mmj6.atm_26_1hbpp16"
@@ -17,8 +17,6 @@ REVIEWS_CONTAINER = (
 
 REVIEW_ITEM = ".ll4r2nl.atm_kd_pg2kvz_1bqn0at"
 
-# temporary
-GECKODRIVER_PATH = "./geckodriver"
 
 def strip_reviews_link(link: str) -> str:
     url = urlparse(link)
@@ -34,12 +32,19 @@ def get_reviews(review_link: str):
     service = webdriver.firefox.service.Service(executable_path=GECKODRIVER_PATH)
     driver = webdriver.Firefox(options=options, service=service)
     container = None
+
     try:
         driver.get(review_link)
         container = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, REVIEWS_CONTAINER))
         )
+        time.sleep(3)
+        container = container.get_attribute("innerHTML")
+        soup = BeautifulSoup(container, "html.parser")
+        review_elements = soup.select(REVIEW_ITEM)[:16]
+        reviews = [review.text for review in review_elements]
+
+        return reviews
+
     finally:
         driver.quit()
-
-    return container
