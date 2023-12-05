@@ -29,8 +29,7 @@ def strip_reviews_link(link: str) -> str:
 def get_reviews(review_link: str):
     options = webdriver.FirefoxOptions()
     options.add_argument("-headless")
-    service = webdriver.firefox.service.Service(executable_path=GECKODRIVER_PATH)
-    driver = webdriver.Firefox(options=options, service=service)
+    driver = webdriver.Firefox(options=options)
     container = None
 
     try:
